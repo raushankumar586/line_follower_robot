@@ -28,8 +28,8 @@ int motor_speed = 120;
 
 void setup()
 {
-    left_motor.setSpeed(motor_speed);
-    right_motor.setSpeed(motor_speed);
+    left_motor.setSpeed(255);
+    right_motor.setSpeed(175);
     left_motor.run(RELEASE);
     right_motor.run(RELEASE);
     Serial.begin(9600);
@@ -146,6 +146,11 @@ void loop()
         {
             Stop();
         }
+    }
+    else
+    {
+            Stop();
+
     }
     // if (sensors_sum < 4000 && sensors_sum > 0)
     // {
