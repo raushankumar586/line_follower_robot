@@ -114,11 +114,11 @@ void loop()
         {
             return;
         }
-        if (command == 1 )
+        if (command == 1)
         {
             Serial.println("Activated");
         }
-        else 
+        else
         {
             Serial.println("Deactivated");
         }
@@ -133,25 +133,16 @@ void loop()
     }
     Serial.println("[" + String(sensors[0]) + "," + String(sensors[1]) + "," + String(sensors[2]) + "," + String(sensors[3]) + "," + String(sensors[4]) + "] :" + "Sum > " + String(sensors_sum));
 
-    if (command == 1)
+
+    if (sensors_sum > 4000)
     {
-
-        if (sensors_sum > 4000)
-        {
-            Serial.println("derailed");
-            Stop();
-        }
-        else if (sensors_sum < 4000)
-        {
-            forward();
-            Serial.println("moving");
-
-        }
+        Serial.println("derailed");
+        Stop();
     }
-    else if(command == 2)
+    else if (sensors_sum < 4000)
     {
-            Stop();
-
+        forward();
+        Serial.println("moving");
     }
     // if (sensors_sum < 4000 && sensors_sum > 0)
     // {
