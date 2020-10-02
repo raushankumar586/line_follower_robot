@@ -1,5 +1,4 @@
-// This code is used for driving the robot on a line 
-
+// This code is used for driving the robot on a line
 
 #include <AFMotor.h>
 
@@ -38,7 +37,7 @@ void setup()
 void forward()
 {
     left_motor.run(FORWARD);
-    right_motor.run(FORWARD);
+    right_motor.run(BACKWARD);
 }
 
 void backward()
@@ -99,7 +98,6 @@ void motor_drive(int right_speed, int left_speed)
     if (left_speed < 0)
         left_speed = 0;
 
-    
     left_motor.setSpeed(left_speed);
     right_motor.setSpeed(right_speed);
     left_motor.run(FORWARD);
@@ -109,6 +107,15 @@ void motor_drive(int right_speed, int left_speed)
 
 void loop()
 {
+    if (Serial.available() > 0)
+    {
+        command = Serial.parseInt();
+        if (command <= 0)
+        {
+            return;
+        }
+    }
+
     sensors_sum = 0;
 
     for (int i = 0; i <= 4; i++)
@@ -116,16 +123,20 @@ void loop()
         sensors[i] = analogRead(i);
         sensors_sum += sensors[i];
     }
-    Serial.println("[" + String(sensors[0])+ "," + String(sensors[1])+ ","+ String(sensors[2])+ ","+ String(sensors[3])+ ","+ String(sensors[4])+ "] :" + "Sum > " + String(sensors_sum));
-    if (sensors_sum < 4000 )
-    {
-        forward();
-    }
-    if (sensors_sum >= 4000)
-    {
-        Stop();
-    }
+    Serial.println("[" + String(sensors[0]) + "," + String(sensors[1]) + "," + String(sensors[2]) + "," + String(sensors[3]) + "," + String(sensors[4]) + "] :" + "Sum > " + String(sensors_sum));
 
+    if (command == 1)
+    {
+
+        if (sensors_sum < 4000)
+        {
+            forward();
+        }
+        if (sensors_sum >= 4000)
+        {
+            Stop();
+        }
+    }
     // if (sensors_sum < 4000 && sensors_sum > 0)
     // {
     //     Position = int(sensors_average / sensors_sum);
