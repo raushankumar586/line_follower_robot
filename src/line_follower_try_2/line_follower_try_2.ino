@@ -136,7 +136,7 @@ void loop()
     if (command == 1)
     {
 
-        if (sensors_sum >= 4000)
+        if (sensors_sum > 4000)
         {
             Serial.println("derailed");
             Stop();
@@ -144,7 +144,8 @@ void loop()
         else if (sensors_sum < 4000)
         {
             forward();
-            
+            Serial.println("moving");
+
         }
     }
     else if(command == 2)
