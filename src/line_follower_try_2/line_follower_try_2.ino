@@ -119,7 +119,7 @@ void loop()
         sensors[i] = analogRead(i);
         sensors_sum += sensors[i];
     }
-    Serial.println("sum : " + String(sensors_sum));
+    Serial.println("[" + String(sensors[0])+ "," + String(sensors[1])+ ","+ String(sensors[2])+ ","+ String(sensors[3])+ ","+ String(sensors[4])+ "] :" + "Sum > " + String(sensors_sum));
     if (sensors_sum < 4000 )
     {
         forward();
