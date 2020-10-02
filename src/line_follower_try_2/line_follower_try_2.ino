@@ -24,11 +24,12 @@ int sensors_average = 0;
 int sensors[5] = {0, 0, 0, 0, 0};
 int Position = 0;
 int error_value = 0;
+int motor_speed = 120;
 
 void setup()
 {
-    left_motor.setSpeed(150);
-    right_motor.setSpeed(150);
+    left_motor.setSpeed(motor_speed);
+    right_motor.setSpeed(motor_speed);
     left_motor.run(RELEASE);
     right_motor.run(RELEASE);
     Serial.begin(9600);
