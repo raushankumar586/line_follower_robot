@@ -39,7 +39,6 @@ void forward()
 {
     left_motor.run(FORWARD);
     right_motor.run(FORWARD);
-    delay(100);
 }
 
 void backward()
@@ -53,7 +52,6 @@ void Stop()
 {
     left_motor.run(RELEASE);
     right_motor.run(RELEASE);
-    delay(100);
 }
 
 void pid_calc()
@@ -147,7 +145,7 @@ void loop()
             Stop();
         }
     }
-    else
+    else if(command == 2)
     {
             Stop();
 
