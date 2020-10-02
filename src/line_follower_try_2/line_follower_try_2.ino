@@ -140,9 +140,10 @@ void loop()
         {
             forward();
         }
-        if (sensors_sum >= 4000)
+        else if (sensors_sum >= 4000)
         {
             Stop();
+            Serial.println("derailed");
         }
     }
     else if(command == 2)
