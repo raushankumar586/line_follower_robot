@@ -114,6 +114,14 @@ void loop()
         {
             return;
         }
+        if (command == 1 )
+        {
+            Serial.println("Activated");
+        }
+        else 
+        {
+            Serial.println("Deactivated");
+        }
     }
 
     sensors_sum = 0;
