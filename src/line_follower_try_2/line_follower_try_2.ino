@@ -39,7 +39,6 @@ void forward()
 {
     left_motor.run(FORWARD);
     right_motor.run(FORWARD);
-    delay(1000);
     Stop();
 
 }
