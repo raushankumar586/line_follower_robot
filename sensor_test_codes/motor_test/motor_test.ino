@@ -1,32 +1,58 @@
-const int IN1 = 7;
-const int IN2 = 6;
-const int IN3 = 5;
-const int IN4 = 4;
-const int ENA = 9;
-const int ENB = 3;
+#include <AFMotor.h>
 
+AF_DCMotor motor1(1);
+AF_DCMotor motor2(2);
+int command = 0;
 
-void setup() {
-
-  pinMode (IN1, OUTPUT);
-  pinMode (IN2, OUTPUT);
-  pinMode (IN3, OUTPUT);
-  pinMode (IN4, OUTPUT);
-  pinMode (ENA, OUTPUT);
-  pinMode (ENB, OUTPUT);
-
+void setup()
+{
+  motor1.setSpeed(255);
+  motor2.setSpeed(255);
+  motor1.run(RELEASE);
+  motor2.run(RELEASE);
+  Serial.begin(9600);
 }
 
-void loop() {
-//control speed 
-  analogWrite(ENA, 255);
-  analogWrite(ENB, 255); 
-//control direction 
-  digitalWrite(IN1, HIGH);
-  digitalWrite(IN2, LOW);
-  digitalWrite(IN3, HIGH);
-  digitalWrite(IN4, LOW);
-  
-  
+void forward()
+{
+  motor1.run(FORWARD);
+  motor2.run(FORWARD);
 
+  delay(4000);
+  motor1.run(RELEASE);
+  motor2.run(RELEASE);
+  delay(200);
+}
+
+void backward()
+{
+  motor1.run(BACKWARD);
+  motor2.run(BACKWARD);
+
+  delay(4000);
+  motor1.run(RELEASE);
+  motor2.run(RELEASE);
+  delay(200);
+}
+void loop()
+{
+
+  if (Serial.available() > 0)
+  {
+    command = Serial.parseInt();
+    if (command <= 0)
+    {
+      return;
+    }
+    if (command == 1)
+    {
+      forward();
+    }
+    else if(command == 2)
+    {
+      backward();
+    }
+    
+    
+  }
 }
