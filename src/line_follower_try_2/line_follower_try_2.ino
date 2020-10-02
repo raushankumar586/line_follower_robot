@@ -136,14 +136,15 @@ void loop()
     if (command == 1)
     {
 
-        if (sensors_sum < 4000)
+        if (sensors_sum >= 4000)
+        {
+            Serial.println("derailed");
+            Stop();
+        }
+        else if (sensors_sum < 4000)
         {
             forward();
-        }
-        else if (sensors_sum >= 4000)
-        {
-            Stop();
-            Serial.println("derailed");
+            
         }
     }
     else if(command == 2)
