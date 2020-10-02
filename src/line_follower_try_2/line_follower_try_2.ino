@@ -27,8 +27,8 @@ int error_value = 0;
 
 void setup()
 {
-    left_motor.setSpeed(255);
-    right_motor.setSpeed(255);
+    left_motor.setSpeed(100);
+    right_motor.setSpeed(100);
     left_motor.run(RELEASE);
     right_motor.run(RELEASE);
     Serial.begin(9600);
@@ -36,8 +36,8 @@ void setup()
 
 void forward()
 {
-    left_motor.run(FORWARD);
-    right_motor.run(BACKWARD);
+    left_motor.run(BACKWARD);
+    right_motor.run(FORWARD);
 }
 
 void backward()
