@@ -27,8 +27,8 @@ int error_value = 0;
 
 void setup()
 {
-    left_motor.setSpeed(100);
-    right_motor.setSpeed(100);
+    left_motor.setSpeed(150);
+    right_motor.setSpeed(150);
     left_motor.run(RELEASE);
     right_motor.run(RELEASE);
     Serial.begin(9600);
@@ -38,11 +38,12 @@ void forward()
 {
     left_motor.run(BACKWARD);
     right_motor.run(FORWARD);
+    delay(100);
 }
 
 void backward()
 {
-    left_motor.run(BACKWARD);
+    left_motor.run(FORWARD);
     right_motor.run(BACKWARD);
 }
 
@@ -51,7 +52,7 @@ void Stop()
 {
     left_motor.run(RELEASE);
     right_motor.run(RELEASE);
-    delay(500);
+    delay(100);
 }
 
 void pid_calc()
