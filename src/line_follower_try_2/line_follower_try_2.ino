@@ -11,7 +11,7 @@
 #define Kd 0 //set Kd Value
 
 AF_DCMotor left_motor(1);
-AF_DCMotor right_motor(2);
+AF_DCMotor right_motor(4);
 int command = 0;
 
 int proportional = 0;
