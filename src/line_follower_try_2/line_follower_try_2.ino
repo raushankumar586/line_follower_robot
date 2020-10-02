@@ -37,7 +37,7 @@ void setup()
 
 void forward()
 {
-    left_motor.run(BACKWARD);
+    left_motor.run(FORWARD);
     right_motor.run(FORWARD);
     delay(100);
 }
