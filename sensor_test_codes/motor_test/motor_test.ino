@@ -1,39 +1,58 @@
+
 #include <AFMotor.h>
 
-AF_DCMotor motor1(1);
-AF_DCMotor motor2(2);
-int command = 0;
+AF_DCMotor motorfr(1);
+AF_DCMotor motorfl(2);
+AF_DCMotor motorbl(3);
+AF_DCMotor motorbr(4);
+speed = 180;
+void setup() {
 
-void setup()
-{
-  motor1.setSpeed(255);
-  motor2.setSpeed(255);
-  motor1.run(RELEASE);
-  motor2.run(RELEASE);
-  Serial.begin(9600);
+  motorfr.setSpeed(speed);
+  motorfl.setSpeed(speed);
+  motorbl.setSpeed(speed);
+  motorbr.setSpeed(speed);
+  
+  motorfr.run(RELEASE);
+  motorfl.run(RELEASE);
+  motorbl.run(RELEASE);
+  motorbr.run(RELEASE);
+  
 }
 
 void forward()
 {
-  motor1.run(FORWARD);
-  motor2.run(FORWARD);
 
-  delay(4000);
-  motor1.run(RELEASE);
-  motor2.run(RELEASE);
+  motorfr.run(FORWARD);
+  motorfl.run(FORWARD);
+  motorbl.run(FORWARD);
+  motorbr.run(FORWARD);
+
+  delay(2500);
+  motorfr.run(RELEASE);
+  motorfl.run(RELEASE);
+  motorbl.run(RELEASE);
+  motorbr.run(RELEASE);
   delay(200);
+
 }
 
 void backward()
 {
-  motor1.run(BACKWARD);
-  motor2.run(BACKWARD);
 
-  delay(4000);
-  motor1.run(RELEASE);
-  motor2.run(RELEASE);
+  motorfr.run(BACKWARD);
+  motorfl.run(BACKWARD);
+  motorbl.run(BACKWARD);
+  motorbr.run(BACKWARD);
+
+  delay(2500);
+  motorfr.run(RELEASE);
+  motorfl.run(RELEASE);
+  motorbl.run(RELEASE);
+  motorbr.run(RELEASE);
   delay(200);
 }
+
 void loop()
 {
 
@@ -52,7 +71,5 @@ void loop()
     {
       backward();
     }
-    
-    
   }
 }

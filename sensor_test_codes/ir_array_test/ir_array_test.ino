@@ -16,10 +16,6 @@ Serial.print(' ');
 Serial.print(analogRead(3)); 
 Serial.print(' '); 
 Serial.print(analogRead(4)); 
-Serial.print(' '); 
-Serial.print(analogRead(5)); 
-Serial.print(' '); 
-Serial.print(analogRead(6)); 
 Serial.println(' '); 
 delay(800);              //Set the number to change frequency of readings.        
   }
