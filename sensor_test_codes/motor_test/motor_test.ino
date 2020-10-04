@@ -5,7 +5,8 @@ AF_DCMotor motorfr(1);
 AF_DCMotor motorfl(2);
 AF_DCMotor motorbl(3);
 AF_DCMotor motorbr(4);
-speed = 180;
+int command = 0 ;
+int speed = 160;
 void setup() {
 
   motorfr.setSpeed(speed);
@@ -17,7 +18,8 @@ void setup() {
   motorfl.run(RELEASE);
   motorbl.run(RELEASE);
   motorbr.run(RELEASE);
-  
+  Serial.begin(9600); 
+  Serial.println("Setup done ");
 }
 
 void forward()
@@ -66,10 +68,12 @@ void loop()
     if (command == 1)
     {
       forward();
+      Serial.println("moving forward");
     }
     else if(command == 2)
     {
       backward();
+      Serial.println("moving backward");
     }
   }
 }
