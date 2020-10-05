@@ -3,15 +3,14 @@
 #include <AFMotor.h>
 
 #define set_point 2000
-#define max_speed 200 //set Max Speed Value
+#define max_speed 160 //set Max Speed Value
 // this is for setting pid parames
 #define Kp 0 //set Kp Value
 #define Ki 0 //set Ki Value
 #define Kd 0 //set Kd Value
 
 AF_DCMotor motorfr(1);
-AF_DCMotor motorfl(2
-s);
+AF_DCMotor motorfl(2);
 AF_DCMotor motorbl(3);
 AF_DCMotor motorbr(4);
 
@@ -29,7 +28,6 @@ int sensors_average = 0;
 int sensors[5] = {0, 0, 0, 0, 0};
 int Position = 0;
 int error_value = 0;
-int motor_speed = 120;
 
 void setup()
 {
@@ -84,48 +82,52 @@ void pid_calc()
 }
 void calc_turn()
 {
-  //  //Restricting the error value between +256.
-  //  if (error_value < -256)
-  //  {
-  //      error_value = -256;
-  //  }
-  //  if (error_value > 256)
-  //  {
-  //      error_value = 256;
-  //  }
-  //  // If error_value is less than zero calculate right turn speed values
-  //  if (error_value < 0)
-  //  {
-  //      right_speed = max_speed + error_value;
-  //      left_speed = max_speed;
-  //  }
-  //  else
-  //  {
-  //      right_speed = max_speed;
-  //      left_speed = max_speed - error_value;
-  //  }
+    //Restricting the error value between +256.
+    Serial.print("Error value :");
+    Serial.println(error_value);
+    if (error_value < -256)
+    {
+        error_value = -256;
+    }
+    if (error_value > 256)
+    {
+        error_value = 256;
+    }
+    // If error_value is less than zero calculate right turn speed values
+    if (error_value < 0)
+    {
+        right_speed = max_speed + error_value;
+        left_speed = max_speed;
+    }
+    else
+    {
+        right_speed = max_speed;
+        left_speed = max_speed - error_value;
+    }
 }
 
 void motor_drive(int right_speed, int left_speed)
 {
-  //  if (right_speed > 255)
-  //      right_speed = 255;
-  //  if (right_speed < 0)
-  //      right_speed = 0;
-  //  if (left_speed > 255)
-  //      left_speed = 255;
-  //  if (left_speed < 0)
-  //      left_speed = 0;
+    if (right_speed > 255)
+        right_speed = 255;
+    if (right_speed < 0)
+        right_speed = 0;
+    if (left_speed > 255)
+        left_speed = 255;
+    if (left_speed < 0)
+        left_speed = 0;
 
-  //  left_motor.setSpeed(left_speed);
-  //  right_motor.setSpeed(right_speed);
-  //  left_motor.run(FORWARD);
-  //  right_motor.run(FORWARD);
-  //  delay(100);
+    motorfl.setSpeed(left_speed);
+    motorbl.setSpeed(left_speed);
+
+    motorbr.setSpeed(right_speed);
+    motorfr.setSpeed(right_speed);
+    delay(100);
 }
 
 void loop()
 {
+    Serial.println("[" + String(sensors[0]) + "," + String(sensors[1]) + "," + String(sensors[2]) + "," + String(sensors[3]) + "," + String(sensors[4]) + "] :" + "Sum > " + String(sensors_sum));
     if (Serial.available() > 0)
     {
         command = Serial.parseInt();
@@ -143,33 +145,34 @@ void loop()
         }
     }
 
+    int sensors_adv = 0;
     sensors_sum = 0;
 
     for (int i = 0; i <= 4; i++)
     {
         sensors[i] = analogRead(i);
+        sensors_adv += sensors[i] * (i) * 1000;
         sensors_sum += sensors[i];
     }
-    Serial.println("[" + String(sensors[0]) + "," + String(sensors[1]) + "," + String(sensors[2]) + "," + String(sensors[3]) + "," + String(sensors[4]) + "] :" + "Sum > " + String(sensors_sum));
-
 
     if (sensors_sum > 4000)
     {
         Serial.println("derailed");
         Stop();
     }
-    else if (sensors_sum < 4000)
+    else if (sensors_sum > 3500 && sensors_sum < 4000)
     {
         forward();
-        Serial.println("moving");
+        Serial.println("moving forward");
     }
-    // if (sensors_sum < 4000 && sensors_sum > 0)
-    // {
-    //     Position = int(sensors_average / sensors_sum);
-    //     pid_calc();
-    //     calc_turn();
-    //     motor_drive(right_speed, left_speed);
-    // }
+
+     if (sensors_sum <= 3500 && sensors_sum > 0)
+     {
+         Position = int(sensors_average / sensors_sum);
+         pid_calc();
+         calc_turn();
+         motor_drive(right_speed, left_speed);
+     }
 
     delay(500);
 }
