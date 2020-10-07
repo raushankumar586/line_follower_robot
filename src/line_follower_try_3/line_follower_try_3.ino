@@ -103,6 +103,7 @@ void left()
     motorfl.run(BACKWARD);
     motorbl.run(BACKWARD);
     motorbr.run(FORWARD);
+    delay(200);
 }
 
 void right()
@@ -112,6 +113,8 @@ void right()
     motorfl.run(FORWARD);
     motorbl.run(FORWARD);
     motorbr.run(BACKWARD);
+    delay(200);
+
 }
 void pid_calc()
 {
