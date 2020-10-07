@@ -15,7 +15,7 @@ AF_DCMotor motorbl(3);
 AF_DCMotor motorbr(2);
 
 int command = 0;
-int speed = 120;
+int speed = 80;
 
 int proportional = 0;
 int integral = 0;
