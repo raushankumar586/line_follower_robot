@@ -47,7 +47,7 @@ void setup()
 
 bool detect_left_90_degree()
 {
-    if (sensors[4] > 900 && sensors[3] > 900 && sensors[2]>900)
+    if (sensors[4] < 50 && sensors[3] < 500 && sensors[2]< 50)
         return true;
     else
         return false;
@@ -55,7 +55,7 @@ bool detect_left_90_degree()
 
 bool detect_right_90_degree()
 {
-    if (sensors[0] > 900 && sensors[1] > 900 && sensors[2]>900)
+    if (sensors[0] < 50 && sensors[1] < 50 && sensors[2]< 50)
         return true;
     else
         return false;
@@ -63,7 +63,7 @@ bool detect_right_90_degree()
 
 bool detect_t_junction()
 {
-    if (sensors[0] > 900 && sensors[1] > 900 && sensors[2]>900 && sensors[3] >900 && sensors[4]>900)
+    if (sensors[0] < 50 && sensors[1] < 50 && sensors[2] < 50 && sensors[3] < 500 && sensors[4]< 50)
         return true;
     else
         return false;
