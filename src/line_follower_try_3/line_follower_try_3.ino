@@ -3,7 +3,7 @@
 #include <AFMotor.h>
 
 #define set_point 2000
-#define max_speed 160 //set Max Speed Value
+#define max_speed 80 //set Max Speed Value
 // this is for setting pid parames
 #define Kp 0 //set Kp Value
 #define Ki 0 //set Ki Value
