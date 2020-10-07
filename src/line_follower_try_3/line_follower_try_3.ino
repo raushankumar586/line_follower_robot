@@ -10,9 +10,9 @@
 #define Kd 0 //set Kd Value
 
 AF_DCMotor motorfr(1);
-AF_DCMotor motorfl(2);
+AF_DCMotor motorfl(4);
 AF_DCMotor motorbl(3);
-AF_DCMotor motorbr(4);
+AF_DCMotor motorbr(2);
 
 int command = 0;
 int speed = 160;
