@@ -45,6 +45,31 @@ void setup()
   Serial.println("Setup done ");
 }
 
+bool detect_left_90_degree()
+{
+    if (sensors[4] > 900 && sensors[3] > 900 && sensors[2]>900)
+        return true;
+    else
+        return false;
+}
+
+bool detect_right_90_degree()
+{
+    if (sensors[0] > 900 && sensors[1] > 900 && sensors[2]>900)
+        return true;
+    else
+        return false;
+}
+
+bool detect_t_junction()
+{
+    if (sensors[0] > 900 && sensors[1] > 900 && sensors[2]>900 && sensors[3] >900 && sensors[4]>900)
+        return true;
+    else
+        return false;
+}
+
+
 void forward()
 {
 
@@ -173,6 +198,19 @@ void loop()
          calc_turn();
          motor_drive(right_speed, left_speed);
      }
+     if (detect_left_90_degree())
+     {
+         Serial.println("detect_left_90_degree");
+     }
 
-    delay(500);
+     if (detect_right_90_degree())
+     {
+         Serial.println("detect_right_90_degree");
+     }
+     if (detect_t_junction())
+     {
+         Serial.println("detect_t_junction");
+     }
+
+     delay(500);
 }
