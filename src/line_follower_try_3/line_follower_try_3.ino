@@ -15,7 +15,7 @@ AF_DCMotor motorbl(3);
 AF_DCMotor motorbr(2);
 
 int command = 0;
-int speed = 160;
+int speed = 120;
 
 int proportional = 0;
 int integral = 0;
@@ -32,22 +32,22 @@ int error_value = 0;
 void setup()
 {
 
-  motorfr.setSpeed(speed);
-  motorfl.setSpeed(speed);
-  motorbl.setSpeed(speed);
-  motorbr.setSpeed(speed);
-  
-  motorfr.run(RELEASE);
-  motorfl.run(RELEASE);
-  motorbl.run(RELEASE);
-  motorbr.run(RELEASE);
-  Serial.begin(9600); 
-  Serial.println("Setup done ");
+    motorfr.setSpeed(speed);
+    motorfl.setSpeed(speed);
+    motorbl.setSpeed(speed);
+    motorbr.setSpeed(speed);
+
+    motorfr.run(RELEASE);
+    motorfl.run(RELEASE);
+    motorbl.run(RELEASE);
+    motorbr.run(RELEASE);
+    Serial.begin(9600);
+    Serial.println("Setup done ");
 }
 
 bool detect_left_90_degree()
 {
-    if (sensors[4] < 50 && sensors[3] < 500 && sensors[2]< 50)
+    if (sensors[4] < 50 && sensors[3] < 500 && sensors[2] < 50)
         return true;
     else
         return false;
@@ -55,7 +55,7 @@ bool detect_left_90_degree()
 
 bool detect_right_90_degree()
 {
-    if (sensors[0] < 50 && sensors[1] < 50 && sensors[2]< 50)
+    if (sensors[0] < 50 && sensors[1] < 50 && sensors[2] < 50)
         return true;
     else
         return false;
@@ -63,39 +63,56 @@ bool detect_right_90_degree()
 
 bool detect_t_junction()
 {
-    if (sensors[0] < 50 && sensors[1] < 50 && sensors[2] < 50 && sensors[3] < 500 && sensors[4]< 50)
+    if (sensors[0] < 50 && sensors[1] < 50 && sensors[2] < 50 && sensors[3] < 500 && sensors[4] < 50)
         return true;
     else
         return false;
 }
 
-
 void forward()
 {
 
-  motorfr.run(FORWARD);
-  motorfl.run(FORWARD);
-  motorbl.run(FORWARD);
-  motorbr.run(FORWARD);
+    motorfr.run(FORWARD);
+    motorfl.run(FORWARD);
+    motorbl.run(FORWARD);
+    motorbr.run(FORWARD);
 }
 
 void backward()
 {
 
-  motorfr.run(BACKWARD);
-  motorfl.run(BACKWARD);
-  motorbl.run(BACKWARD);
-  motorbr.run(BACKWARD);
+    motorfr.run(BACKWARD);
+    motorfl.run(BACKWARD);
+    motorbl.run(BACKWARD);
+    motorbr.run(BACKWARD);
 }
+
+
 void Stop()
 
 {
-  motorfr.run(RELEASE);
-  motorfl.run(RELEASE);
-  motorbl.run(RELEASE);
-  motorbr.run(RELEASE);
+    motorfr.run(RELEASE);
+    motorfl.run(RELEASE);
+    motorbl.run(RELEASE);
+    motorbr.run(RELEASE);
 }
 
+void left()
+{
+    motorfr.run(FORWARD);
+    motorfl.run(BACKWARD);
+    motorbl.run(BACKWARD);
+    motorbr.run(FORWARD);
+}
+
+void right()
+{
+
+    motorfr.run(BACKWARD);
+    motorfl.run(FORWARD);
+    motorbl.run(FORWARD);
+    motorbr.run(BACKWARD);
+}
 void pid_calc()
 {
 
@@ -152,7 +169,7 @@ void motor_drive(int right_speed, int left_speed)
 
 void loop()
 {
-    Serial.println("[" + String(sensors[0]) + "," + String(sensors[1]) + "," + String(sensors[2]) + "," + String(sensors[3]) + "," + String(sensors[4]) + "] :" + "Sum > " + String(sensors_sum));
+    // Serial.println("[" + String(sensors[0]) + "," + String(sensors[1]) + "," + String(sensors[2]) + "," + String(sensors[3]) + "," + String(sensors[4]) + "] :" + "Sum > " + String(sensors_sum));
     if (Serial.available() > 0)
     {
         command = Serial.parseInt();
@@ -176,7 +193,7 @@ void loop()
     for (int i = 0; i <= 4; i++)
     {
         sensors[i] = analogRead(i);
-        sensors_adv += sensors[i] * (i) * 1000;
+        sensors_adv += sensors[i] * (i)*1000;
         sensors_sum += sensors[i];
     }
 
@@ -191,26 +208,29 @@ void loop()
         Serial.println("moving forward");
     }
 
-     if (sensors_sum <= 3500 && sensors_sum > 0)
-     {
-         Position = int(sensors_average / sensors_sum);
-         pid_calc();
-         calc_turn();
-         motor_drive(right_speed, left_speed);
-     }
-     if (detect_left_90_degree())
-     {
-         Serial.println("detect_left_90_degree");
-     }
+    if (sensors_sum <= 3500 && sensors_sum > 0)
+    {
+        Position = int(sensors_average / sensors_sum);
+        pid_calc();
+        calc_turn();
+        motor_drive(right_speed, left_speed);
+    }
+    if (detect_left_90_degree())
+    {
+        Serial.println("detect_left_90_degree");
+        left();
+    }
 
-     if (detect_right_90_degree())
-     {
-         Serial.println("detect_right_90_degree");
-     }
-     if (detect_t_junction())
-     {
-         Serial.println("detect_t_junction");
-     }
+    if (detect_right_90_degree())
+    {
+        Serial.println("detect_right_90_degree");
+        right();
+    }
+    if (detect_t_junction())
+    {
+        Serial.println("detect_t_junction");
+        Stop();
+    }
 
-     delay(500);
+    delay(500);
 }
