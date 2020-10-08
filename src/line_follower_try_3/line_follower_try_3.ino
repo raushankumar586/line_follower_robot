@@ -5,9 +5,9 @@
 #define set_point 2000
 #define max_speed 80 //set Max Speed Value
 // this is for setting pid parames
-float kp = 0.02 ;
-float ki = 0    ;
-float kd = 0    ;
+float kp = 0.04;
+float ki = 0;
+float kd = 0;
 
 AF_DCMotor motorfr(1);
 AF_DCMotor motorfl(4);
@@ -160,13 +160,13 @@ void calc_turn()
     // If error_value is less than zero calculate right turn speed values
     if (error_value < 0)
     {
-        right_speed = max_speed + error_value;
-        left_speed = max_speed;
+        right_speed = speed + error_value;
+        left_speed = speed;
     }
     else
     {
-        right_speed = max_speed;
-        left_speed = max_speed - error_value;
+        right_speed = speed;
+        left_speed = speed - error_value;
     }
 }
 
@@ -216,20 +216,19 @@ void run_command(long com)
 
     if (com > 1000 && com <= 2000)
     {
-        setkp(com-1000);
+        setkp(com - 1000);
     }
-    
 
     if (com > 2000 && com <= 3000)
     {
-        setki(com-2000);
+        setki(com - 2000);
     }
-    
+
     if (com > 3000 && com <= 4000)
     {
-        setkd(com-3000);
+        setkd(com - 3000);
     }
-    
+
     command = 0;
 }
 
@@ -290,7 +289,7 @@ void run_navigation_commands(int com)
 
 void print_message(String msg)
 {
-  Serial1.println(msg);
+    Serial1.println(msg);
 }
 
 void loop()
@@ -315,38 +314,44 @@ void loop()
         // Serial.println("derailed");
         Stop();
     }
+
     else if (sensors_sum > 3500 && sensors_sum <= 4000)
     {
-        forward();
-        not_turning = true;
+
         // Serial.println("moving forward");
-    }
 
-    if (sensors[2] > 50)
-    {
-        Position = int(sensors_adv / sensors_sum);
-        // Serial1.println(" POS : " + String(Position) + " adv " + String(sensors_adv));
-        // Serial.println(" POS : " + String(Position) + " adv " + String(sensors_adv));
-        pid_calc();
-        calc_turn();
-        motor_drive(right_speed, left_speed);
-    }
-    if (detect_t_junction())
-    {
-        // Serial.println("detect_t_junction");
-        Stop();
-    }
-    else if (detect_left_90_degree())
-    {
-        // Serial.println("detect_left_90_degree");
-        left();
-        not_turning = false;
-    }
+        if (sensors[2] > 50)
+        {
+            Position = int(sensors_adv / sensors_sum);
+            // Serial1.println(" POS : " + String(Position) + " adv " + String(sensors_adv));
+            // Serial.println(" POS : " + String(Position) + " adv " + String(sensors_adv));
+            pid_calc();
+            calc_turn();
+            motor_drive(right_speed, left_speed);
+        }
+        if (detect_t_junction())
+        {
+            // Serial.println("detect_t_junction");
+            Stop();
+        }
+        else if (detect_left_90_degree())
+        {
+            // Serial.println("detect_left_90_degree");
+            left();
+            not_turning = false;
+        }
 
-    else if (detect_right_90_degree())
-    {
-        // Serial.println("detect_right_90_degree");
-        right();
-        not_turning = false;
+        else if (detect_right_90_degree())
+        {
+            // Serial.println("detect_right_90_degree");
+            right();
+            not_turning = false;
+        }
+        else
+        {
+            forward();
+            not_turning = true;
+        }
+        
     }
 }
