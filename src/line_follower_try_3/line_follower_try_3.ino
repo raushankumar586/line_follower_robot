@@ -4,10 +4,10 @@
 
 #define set_point 2000
 #define max_speed 80 //set Max Speed Value
-// this is for setting pid parames 
+// this is for setting pid parames
 #define Kp 0.02 //set Kp Value
-#define Ki 0 //set Ki Value
-#define Kd 0 //set Kd Value
+#define Ki 0    //set Ki Value
+#define Kd 0    //set Kd Value
 
 AF_DCMotor motorfr(1);
 AF_DCMotor motorfl(4);
@@ -42,6 +42,7 @@ void setup()
     motorbl.run(RELEASE);
     motorbr.run(RELEASE);
     Serial.begin(9600);
+    Serial1.begin(9600);
     Serial.println("Setup done ");
 }
 
@@ -96,7 +97,6 @@ void backward()
     motorbr.run(BACKWARD);
 }
 
-
 void Stop()
 
 {
@@ -109,10 +109,10 @@ void Stop()
 int ad = 50;
 void left()
 {
-    motorfr.setSpeed(speed+ ad);
-    motorfl.setSpeed(speed +ad);
-    motorbl.setSpeed(speed +ad );
-    motorbr.setSpeed(speed +ad );
+    motorfr.setSpeed(speed + ad);
+    motorfl.setSpeed(speed + ad);
+    motorbl.setSpeed(speed + ad);
+    motorbr.setSpeed(speed + ad);
 
     motorfr.run(FORWARD);
     motorfl.run(BACKWARD);
@@ -124,16 +124,16 @@ void left()
 void right()
 {
 
-    motorfr.setSpeed(speed + ad );
-    motorfl.setSpeed(speed + ad );
-    motorbl.setSpeed(speed + ad );
-    motorbr.setSpeed(speed + ad );
+    motorfr.setSpeed(speed + ad);
+    motorfl.setSpeed(speed + ad);
+    motorbl.setSpeed(speed + ad);
+    motorbr.setSpeed(speed + ad);
 
     motorfr.run(BACKWARD);
     motorfl.run(FORWARD);
     motorbl.run(FORWARD);
     motorbr.run(BACKWARD);
-    delay(700);    
+    delay(700);
 }
 void pid_calc()
 {
@@ -167,7 +167,6 @@ void calc_turn()
         right_speed = max_speed;
         left_speed = max_speed - error_value;
     }
-    
 }
 
 void motor_drive(int right_speed, int left_speed)
@@ -191,18 +190,86 @@ void motor_drive(int right_speed, int left_speed)
 
 long sensors_adv = 0.0;
 
+int exec_serial_commands()
+{
+    command = 0;
+    if (Serial1.available())
+    {
+        command = Serial1.parseInt();
+    }
+    if (Serial.available())
+    {
+        command = Serial.parseInt();
+    }
+    run_command(command);
+    return command;
+}
+
+void run_command(long com)
+{
+    if (com == 0)
+        return;
+
+    if (com > 400 && com < 500)
+    {
+        run_navigation_commands(com);
+    }
+    command = 0;
+}
+
+
+void run_navigation_commands(int com)
+{
+
+  com = com - 400;
+  switch (com)
+  {
+
+  case 1:
+    print_message("forward");
+    forward();
+    break;
+
+  case 2:
+    print_message("left");
+    left();
+    break;
+
+  case 3:
+    print_message("Stop");
+    Stop();
+    break;
+
+  case 4:
+    print_message("right");
+    right();
+    break;
+
+  case 5:
+    print_message("reverse");
+    backward();
+    break;
+  }
+}
+
+void print_message(String msg)
+{
+  Serial1.println(msg);
+}
+
 void loop()
 {
-   
+
+    exec_serial_commands();
     Serial.println("[" + String(sensors[0]) + "," + String(sensors[1]) + "," + String(sensors[2]) + "," + String(sensors[3]) + "," + String(sensors[4]) + "] :" + "Sum > " + String(sensors_sum));
-    
+
     sensors_sum = 0;
-    sensors_adv = 0 ;
+    sensors_adv = 0;
 
     for (int i = 0; i <= 4; i++)
     {
         sensors[i] = analogRead(i);
-        sensors_adv += sensors[i]*(i)* 1000.0;
+        sensors_adv += sensors[i] * (i)*1000.0;
         //Serial.println("adv : " + String(sensors_adv));
         sensors_sum += sensors[i];
     }
@@ -212,7 +279,7 @@ void loop()
         Serial.println("derailed");
         Stop();
     }
-    else if (sensors_sum > 3500 && sensors_sum <=4400)
+    else if (sensors_sum > 3500 && sensors_sum <= 4400)
     {
         forward();
         not_turning = true;
