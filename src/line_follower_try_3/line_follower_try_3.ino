@@ -221,7 +221,7 @@ void run_command(long com)
         setki(com);
     }
     
-    if (com > 4000 && com <= 4000)
+    if (com > 3000 && com <= 4000)
     {
         setkd(com);
     }
@@ -238,7 +238,7 @@ void setkp(int com)
 void setki(int com)
 {
     ki = com / 10000.0;
-    Serial1.println("Ki : " + String(kd));
+    Serial1.println("Ki : " + String(ki));
 }
 void setkd(int com)
 {
