@@ -5,9 +5,9 @@
 #define set_point 2000
 #define max_speed 80 //set Max Speed Value
 // this is for setting pid parames
-#define Kp 0.02 //set Kp Value
-#define Ki 0    //set Ki Value
-#define Kd 0    //set Kd Value
+int Kp = 0.02 ;
+int Ki = 0    ;
+int Kd = 0    ;
 
 AF_DCMotor motorfr(1);
 AF_DCMotor motorfl(4);
@@ -15,7 +15,7 @@ AF_DCMotor motorbl(3);
 AF_DCMotor motorbr(2);
 
 int command = 0;
-int speed = 100;
+int speed = 160;
 bool not_turning = true;
 int proportional = 0;
 int integral = 0;
@@ -214,9 +214,36 @@ void run_command(long com)
     {
         run_navigation_commands(com);
     }
+    
+    if (com > 1000 && com <= 2000)
+    {
+        setkp(com);
+    }
+    
+
+    if (com > 2000 && com <= 3000)
+    {
+        setkd(com);
+    }
+    
+    if (com > 4000 && com <= 4000)
+    {
+        setki(com);
+    }
+    
     command = 0;
 }
 
+void setkp(int com)
+{
+}
+
+void setki(int com)
+{
+}
+void setkd(int com)
+{
+}
 
 void run_navigation_commands(int com)
 {
