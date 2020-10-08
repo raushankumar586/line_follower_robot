@@ -4,8 +4,8 @@
 
 #define set_point 2000
 #define max_speed 80 //set Max Speed Value
-// this is for setting pid parames
-#define Kp 0 //set Kp Value
+// this is for setting pid parames 
+#define Kp 0.02 //set Kp Value
 #define Ki 0 //set Ki Value
 #define Kd 0 //set Kd Value
 
@@ -15,8 +15,8 @@ AF_DCMotor motorbl(3);
 AF_DCMotor motorbr(2);
 
 int command = 0;
-int speed = 80;
-
+int speed = 100;
+bool not_turning = true;
 int proportional = 0;
 int integral = 0;
 int derivative = 0;
@@ -72,6 +72,10 @@ bool detect_t_junction()
 void forward()
 {
 
+    motorfr.setSpeed(speed);
+    motorfl.setSpeed(speed);
+    motorbl.setSpeed(speed);
+    motorbr.setSpeed(speed);
     motorfr.run(FORWARD);
     motorfl.run(FORWARD);
     motorbl.run(FORWARD);
@@ -80,6 +84,11 @@ void forward()
 
 void backward()
 {
+
+    motorfr.setSpeed(speed);
+    motorfl.setSpeed(speed);
+    motorbl.setSpeed(speed);
+    motorbr.setSpeed(speed);
 
     motorfr.run(BACKWARD);
     motorfl.run(BACKWARD);
@@ -97,21 +106,34 @@ void Stop()
     motorbr.run(RELEASE);
 }
 
+int ad = 50;
 void left()
 {
+    motorfr.setSpeed(speed+ ad);
+    motorfl.setSpeed(speed +ad);
+    motorbl.setSpeed(speed +ad );
+    motorbr.setSpeed(speed +ad );
+
     motorfr.run(FORWARD);
     motorfl.run(BACKWARD);
     motorbl.run(BACKWARD);
     motorbr.run(FORWARD);
+    delay(700);
 }
 
 void right()
 {
 
+    motorfr.setSpeed(speed + ad );
+    motorfl.setSpeed(speed + ad );
+    motorbl.setSpeed(speed + ad );
+    motorbr.setSpeed(speed + ad );
+
     motorfr.run(BACKWARD);
     motorfl.run(FORWARD);
     motorbl.run(FORWARD);
     motorbr.run(BACKWARD);
+    delay(700);    
 }
 void pid_calc()
 {
@@ -125,8 +147,7 @@ void pid_calc()
 void calc_turn()
 {
     //Restricting the error value between +256.
-    Serial.print("Error value :");
-    Serial.println(error_value);
+    Serial.print("Error value :" + String(error_value) + " l: " + String(left_speed) + " r: " + String(right_speed));
     if (error_value < -256)
     {
         error_value = -256;
@@ -146,6 +167,7 @@ void calc_turn()
         right_speed = max_speed;
         left_speed = max_speed - error_value;
     }
+    
 }
 
 void motor_drive(int right_speed, int left_speed)
@@ -167,70 +189,60 @@ void motor_drive(int right_speed, int left_speed)
     delay(100);
 }
 
+long sensors_adv = 0.0;
+
 void loop()
 {
-    // Serial.println("[" + String(sensors[0]) + "," + String(sensors[1]) + "," + String(sensors[2]) + "," + String(sensors[3]) + "," + String(sensors[4]) + "] :" + "Sum > " + String(sensors_sum));
-    if (Serial.available() > 0)
-    {
-        command = Serial.parseInt();
-        if (command <= 0)
-        {
-            return;
-        }
-        if (command == 1)
-        {
-            Serial.println("Activated");
-        }
-        else
-        {
-            Serial.println("Deactivated");
-        }
-    }
-
-    int sensors_adv = 0;
+   
+    Serial.println("[" + String(sensors[0]) + "," + String(sensors[1]) + "," + String(sensors[2]) + "," + String(sensors[3]) + "," + String(sensors[4]) + "] :" + "Sum > " + String(sensors_sum));
+    
     sensors_sum = 0;
+    sensors_adv = 0 ;
 
     for (int i = 0; i <= 4; i++)
     {
         sensors[i] = analogRead(i);
-        sensors_adv += sensors[i] * (i)*1000;
+        sensors_adv += sensors[i]*(i)* 1000.0;
+        //Serial.println("adv : " + String(sensors_adv));
         sensors_sum += sensors[i];
     }
 
-    if (sensors_sum > 4000)
+    if (sensors_sum > 4400 && not_turning)
     {
         Serial.println("derailed");
         Stop();
     }
-    else if (sensors_sum > 3500 && sensors_sum < 4000)
+    else if (sensors_sum > 3500 && sensors_sum <=4400)
     {
         forward();
+        not_turning = true;
         Serial.println("moving forward");
     }
 
     if (sensors_sum <= 3500 && sensors_sum > 0)
     {
-        Position = int(sensors_average / sensors_sum);
+        Position = int(sensors_adv / sensors_sum);
+        Serial.print(" POS : " + String(Position) + " adv " + String(sensors_adv));
         pid_calc();
         calc_turn();
         motor_drive(right_speed, left_speed);
-    }
-    if (detect_left_90_degree())
-    {
-        Serial.println("detect_left_90_degree");
-        left();
-    }
-
-    if (detect_right_90_degree())
-    {
-        Serial.println("detect_right_90_degree");
-        right();
     }
     if (detect_t_junction())
     {
         Serial.println("detect_t_junction");
         Stop();
     }
+    else if (detect_left_90_degree())
+    {
+        Serial.println("detect_left_90_degree");
+        left();
+        not_turning = false;
+    }
 
-    delay(500);
+    else if (detect_right_90_degree())
+    {
+        Serial.println("detect_right_90_degree");
+        right();
+        not_turning = false;
+    }
 }
