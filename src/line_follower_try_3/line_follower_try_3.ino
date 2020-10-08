@@ -5,9 +5,9 @@
 #define set_point 2000
 #define max_speed 80 //set Max Speed Value
 // this is for setting pid parames
-int Kp = 0.02 ;
-int Ki = 0    ;
-int Kd = 0    ;
+float kp = 0.02 ;
+float ki = 0    ;
+float kd = 0    ;
 
 AF_DCMotor motorfr(1);
 AF_DCMotor motorfl(4);
@@ -142,7 +142,7 @@ void pid_calc()
     integral = integral + proportional;
     derivative = proportional - last_proportional;
     last_proportional = proportional;
-    error_value = int(proportional * Kp + integral * Ki + derivative * Kd);
+    error_value = int(proportional * kp + integral * ki + derivative * kd);
 }
 void calc_turn()
 {
@@ -210,11 +210,6 @@ void run_command(long com)
     if (com == 0)
         return;
 
-    if (com > 400 && com < 500)
-    {
-        run_navigation_commands(com);
-    }
-    
     if (com > 1000 && com <= 2000)
     {
         setkp(com);
@@ -236,47 +231,54 @@ void run_command(long com)
 
 void setkp(int com)
 {
+    kp = com / 100000.0;
+    Serial1.println("Kp : " + String(kp));
 }
 
 void setki(int com)
 {
+    ki = com / 100000.0;
+    Serial1.println("Ki : " + String(kd));
 }
 void setkd(int com)
 {
+
+    kd = com / 100000.0;
+    Serial1.println("Kd : " + String(kd));
 }
 
 void run_navigation_commands(int com)
 {
 
-  com = com - 400;
-  switch (com)
-  {
+    com = com - 400;
+    switch (com)
+    {
 
-  case 1:
-    print_message("forward");
-    forward();
-    break;
+    case 1:
+        print_message("forward");
+        forward();
+        break;
 
-  case 2:
-    print_message("left");
-    left();
-    break;
+    case 2:
+        print_message("left");
+        left();
+        break;
 
-  case 3:
-    print_message("Stop");
-    Stop();
-    break;
+    case 3:
+        print_message("Stop");
+        Stop();
+        break;
 
-  case 4:
-    print_message("right");
-    right();
-    break;
+    case 4:
+        print_message("right");
+        right();
+        break;
 
-  case 5:
-    print_message("reverse");
-    backward();
-    break;
-  }
+    case 5:
+        print_message("reverse");
+        backward();
+        break;
+    }
 }
 
 void print_message(String msg)
