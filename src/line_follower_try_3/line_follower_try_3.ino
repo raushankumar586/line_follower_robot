@@ -147,8 +147,8 @@ void pid_calc()
 void calc_turn()
 {
     //Restricting the error value between +256.
-    Serial1.print("E:" + String(error_value) + " l: " + String(left_speed) + " r: " + String(right_speed));
-    Serial.print("E:" + String(error_value) + " l: " + String(left_speed) + " r: " + String(right_speed));
+    Serial1.println("E:" + String(error_value) + " l: " + String(left_speed) + " r: " + String(right_speed));
+    Serial.println("E:" + String(error_value) + " l: " + String(left_speed) + " r: " + String(right_speed));
     if (error_value < -256)
     {
         error_value = -256;
@@ -322,8 +322,8 @@ void loop()
     if (sensors[2] > 50)
     {
         Position = int(sensors_adv / sensors_sum);
-        Serial1.print(" POS : " + String(Position) + " adv " + String(sensors_adv));
-        Serial.print(" POS : " + String(Position) + " adv " + String(sensors_adv));
+        Serial1.println(" POS : " + String(Position) + " adv " + String(sensors_adv));
+        Serial.println(" POS : " + String(Position) + " adv " + String(sensors_adv));
         pid_calc();
         calc_turn();
         //motor_drive(right_speed, left_speed);
