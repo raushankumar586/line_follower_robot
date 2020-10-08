@@ -148,6 +148,7 @@ void calc_turn()
 {
     //Restricting the error value between +256.
     Serial1.print("E:" + String(error_value) + " l: " + String(left_speed) + " r: " + String(right_speed));
+    Serial.print("E:" + String(error_value) + " l: " + String(left_speed) + " r: " + String(right_speed));
     if (error_value < -256)
     {
         error_value = -256;
@@ -233,18 +234,21 @@ void setkp(int com)
 {
     kp = com / 10000.0;
     Serial1.println("Kp : " + String(kp));
+    Serial.println("Kp : " + String(kp));
 }
 
 void setki(int com)
 {
     ki = com / 10000.0;
     Serial1.println("Ki : " + String(ki));
+    Serial.println("Ki : " + String(ki));
 }
 void setkd(int com)
 {
 
     kd = com / 10000.0;
     Serial1.println("Kd : " + String(kd));
+    Serial.println("Kd : " + String(kd));
 }
 
 void run_navigation_commands(int com)
@@ -319,6 +323,7 @@ void loop()
     {
         Position = int(sensors_adv / sensors_sum);
         Serial1.print(" POS : " + String(Position) + " adv " + String(sensors_adv));
+        Serial.print(" POS : " + String(Position) + " adv " + String(sensors_adv));
         pid_calc();
         calc_turn();
         //motor_drive(right_speed, left_speed);
