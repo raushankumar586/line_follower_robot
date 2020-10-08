@@ -315,10 +315,10 @@ void loop()
         // Serial.println("moving forward");
     }
 
-    if (sensors[2] > 50 || (sensors_sum < 3500 && sensors_sum > 0)  )
+    if (sensors[2] > 50)
     {
         Position = int(sensors_adv / sensors_sum);
-        Serial.print(" POS : " + String(Position) + " adv " + String(sensors_adv));
+        Serial1.print(" POS : " + String(Position) + " adv " + String(sensors_adv));
         pid_calc();
         calc_turn();
         //motor_drive(right_speed, left_speed);
