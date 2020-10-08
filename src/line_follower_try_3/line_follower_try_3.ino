@@ -308,20 +308,20 @@ void loop()
         // Serial.println("derailed");
         Stop();
     }
-    else if (sensors_sum > 3500 && sensors_sum <= 4400)
+    else if (sensors_sum > 3500 && sensors_sum <= 4000)
     {
         forward();
         not_turning = true;
         // Serial.println("moving forward");
     }
 
-    if (sensors_sum <= 3500 && sensors_sum > 0)
+    if (sensors[2] > 50 || (sensors_sum < 3500 && sensors_sum > 0)  )
     {
         Position = int(sensors_adv / sensors_sum);
         Serial.print(" POS : " + String(Position) + " adv " + String(sensors_adv));
         pid_calc();
         calc_turn();
-        motor_drive(right_speed, left_speed);
+        //motor_drive(right_speed, left_speed);
     }
     if (detect_t_junction())
     {
