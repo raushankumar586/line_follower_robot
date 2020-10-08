@@ -183,9 +183,12 @@ void motor_drive(int right_speed, int left_speed)
 
     motorfl.setSpeed(left_speed);
     motorbl.setSpeed(left_speed);
-
     motorbr.setSpeed(right_speed);
     motorfr.setSpeed(right_speed);
+    motorfr.run(FORWARD);
+    motorfl.run(FORWARD);
+    motorbl.run(FORWARD);
+    motorbr.run(FORWARD);
     delay(100);
 }
 
@@ -322,11 +325,11 @@ void loop()
     if (sensors[2] > 50)
     {
         Position = int(sensors_adv / sensors_sum);
-        Serial1.println(" POS : " + String(Position) + " adv " + String(sensors_adv));
-        Serial.println(" POS : " + String(Position) + " adv " + String(sensors_adv));
+        // Serial1.println(" POS : " + String(Position) + " adv " + String(sensors_adv));
+        // Serial.println(" POS : " + String(Position) + " adv " + String(sensors_adv));
         pid_calc();
         calc_turn();
-        //motor_drive(right_speed, left_speed);
+        motor_drive(right_speed, left_speed);
     }
     if (detect_t_junction())
     {
