@@ -147,7 +147,7 @@ void pid_calc()
 void calc_turn()
 {
     //Restricting the error value between +256.
-    Serial.print("Error value :" + String(error_value) + " l: " + String(left_speed) + " r: " + String(right_speed));
+    // Serial1.print("E:" + String(error_value) + " l: " + String(left_speed) + " r: " + String(right_speed));
     if (error_value < -256)
     {
         error_value = -256;
@@ -212,18 +212,18 @@ void run_command(long com)
 
     if (com > 1000 && com <= 2000)
     {
-        setkp(com);
+        setkp(com-1000);
     }
     
 
     if (com > 2000 && com <= 3000)
     {
-        setki(com);
+        setki(com-2000);
     }
     
     if (com > 3000 && com <= 4000)
     {
-        setkd(com);
+        setkd(com-3000);
     }
     
     command = 0;
@@ -290,7 +290,7 @@ void loop()
 {
 
     exec_serial_commands();
-    Serial.println("[" + String(sensors[0]) + "," + String(sensors[1]) + "," + String(sensors[2]) + "," + String(sensors[3]) + "," + String(sensors[4]) + "] :" + "Sum > " + String(sensors_sum));
+    Serial1.println("[" + String(sensors[0]) + "," + String(sensors[1]) + "," + String(sensors[2]) + "," + String(sensors[3]) + "," + String(sensors[4]) + "] :" + "Sum > " + String(sensors_sum));
 
     sensors_sum = 0;
     sensors_adv = 0;
@@ -305,14 +305,14 @@ void loop()
 
     if (sensors_sum > 4400 && not_turning)
     {
-        Serial.println("derailed");
+        // Serial.println("derailed");
         Stop();
     }
     else if (sensors_sum > 3500 && sensors_sum <= 4400)
     {
         forward();
         not_turning = true;
-        Serial.println("moving forward");
+        // Serial.println("moving forward");
     }
 
     if (sensors_sum <= 3500 && sensors_sum > 0)
@@ -325,19 +325,19 @@ void loop()
     }
     if (detect_t_junction())
     {
-        Serial.println("detect_t_junction");
+        // Serial.println("detect_t_junction");
         Stop();
     }
     else if (detect_left_90_degree())
     {
-        Serial.println("detect_left_90_degree");
+        // Serial.println("detect_left_90_degree");
         left();
         not_turning = false;
     }
 
     else if (detect_right_90_degree())
     {
-        Serial.println("detect_right_90_degree");
+        // Serial.println("detect_right_90_degree");
         right();
         not_turning = false;
     }
