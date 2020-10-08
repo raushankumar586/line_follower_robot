@@ -147,7 +147,7 @@ void pid_calc()
 void calc_turn()
 {
     //Restricting the error value between +256.
-    // Serial1.print("E:" + String(error_value) + " l: " + String(left_speed) + " r: " + String(right_speed));
+    Serial1.print("E:" + String(error_value) + " l: " + String(left_speed) + " r: " + String(right_speed));
     if (error_value < -256)
     {
         error_value = -256;
@@ -290,7 +290,7 @@ void loop()
 {
 
     exec_serial_commands();
-    Serial1.println("[" + String(sensors[0]) + "," + String(sensors[1]) + "," + String(sensors[2]) + "," + String(sensors[3]) + "," + String(sensors[4]) + "] :" + "Sum > " + String(sensors_sum));
+    // Serial1.println("[" + String(sensors[0]) + "," + String(sensors[1]) + "," + String(sensors[2]) + "," + String(sensors[3]) + "," + String(sensors[4]) + "] :" + "Sum > " + String(sensors_sum));
 
     sensors_sum = 0;
     sensors_adv = 0;
