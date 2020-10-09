@@ -270,7 +270,7 @@ void run_command(long com)
         setkd(com - 3000);
     }
 
-    if (com > 4000 && com <= 4050)
+    if (com > 4000 && com <= 4100)
     {
         setad(com - 4000);
     }
@@ -287,11 +287,17 @@ void run_command(long com)
 void setad(int com)
 {
     ad = com;
+    Serial1.println("ad : " + String(ad));
+    Serial.println(":ad" + String(ad));
+
 }
 
 void set_delay_turn(int com)
 {
     delay_turn = com;
+    Serial1.println("delay_turn : " + String(delay_turn));
+    Serial.println(":delay_turn" + String(delay_turn));
+
 }
 void set_speed(int com)
 {
@@ -381,7 +387,7 @@ void loop()
     {
         // Serial.println("derailed");
         Stop();
-        
+
     }
 
     else if (sensors_sum > 3500 && sensors_sum <= 4000)
