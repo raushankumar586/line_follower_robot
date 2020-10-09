@@ -6,7 +6,7 @@
 #define max_speed 80 //set Max Speed Value
 #include <Servo.h>
 
-Servo myservo;  
+Servo myservo;
 int pos = 0;
 
 // this is for setting pid parames
@@ -50,9 +50,10 @@ void setup()
     Serial1.begin(9600);
     myservo.attach(9);
     // opening a beginnning
-    for (pos = 180; pos <= 100 ; pos -= 1) { 
-    myservo.write(pos);              
-    delay(15);
+    for (pos = 180; pos <= 100; pos -= 1)
+    {
+        myservo.write(pos);
+        delay(15);
     }
     Serial.println("Setup done ");
 }
@@ -66,7 +67,6 @@ void open_hand()
         myservo.write(pos);
         delay(15);
     }
-    
 }
 
 void close_hand()
@@ -152,6 +152,7 @@ void left()
     motorbl.run(BACKWARD);
     motorbr.run(FORWARD);
     delay(delay_turn);
+    not_turning = true;
 }
 
 void right()
@@ -166,7 +167,9 @@ void right()
     motorfl.run(FORWARD);
     motorbl.run(FORWARD);
     motorbr.run(BACKWARD);
-    delay(700);
+    delay(delay_turn);
+    not_turning = true;
+
 }
 void pid_calc()
 {
@@ -246,7 +249,6 @@ void run_command(long com)
 {
     if (com == 0)
         return;
-   
 
     if (com > 50 && com <= 200)
     {
@@ -268,12 +270,32 @@ void run_command(long com)
         setkd(com - 3000);
     }
 
+    if (com > 4000 && com <= 4050)
+    {
+        setad(com - 4000);
+    }
+
+    if (com > 5000 && com <= 8000)
+    {
+        set_delay_turn(com - 5000);
+    }
+
     command = 0;
 }
 
+    void setad(com)
+    {
+        ad = com;
+    }
+
+    void setad(com)
+    {
+        delay_turn = com;
+    }
+
 void set_speed(int com)
 {
-    speed= com;
+    speed = com;
     Serial1.println("speed : " + String(speed));
     Serial.println(":speed" + String(speed));
 }
@@ -362,7 +384,7 @@ void loop()
 
     else if (sensors_sum > 3500 && sensors_sum <= 4000)
     {
- 
+
         // Serial.println("moving forward");
 
         // if(sensors[5] < 50)
@@ -380,32 +402,30 @@ void loop()
             calc_turn();
             motor_drive(right_speed, left_speed);
         }
-        
+
         else
         {
             forward();
             not_turning = true;
         }
-        
-        
     }
 
     else if (detect_t_junction())
-        {
-            // Serial.println("detect_t_junction");
-            Stop();
-        }
-        else if (detect_left_90_degree())
-        {
-            // Serial.println("detect_left_90_degree");
-            left();
-            not_turning = false;
-        }
+    {
+        // Serial.println("detect_t_junction");
+        Stop();
+    }
+    else if (detect_left_90_degree())
+    {
+        // Serial.println("detect_left_90_degree");
+        left();
+        not_turning = false;
+    }
 
-        else if (detect_right_90_degree())
-        {
-            // Serial.println("detect_right_90_degree");
-            right();
-            not_turning = false;
-        }
+    else if (detect_right_90_degree())
+    {
+        // Serial.println("detect_right_90_degree");
+        right();
+        not_turning = false;
+    }
 }
