@@ -66,6 +66,7 @@ void open_hand()
         myservo.write(pos);
         delay(15);
     }
+    
 }
 
 void close_hand()
@@ -363,11 +364,12 @@ void loop()
 
         // Serial.println("moving forward");
 
-        if(sensors[5] < 50)
-        {
-            Stop();
-            close_hand();
-        }
+        // if(sensors[5] < 50)
+        // {
+        //     Stop();
+
+        //     close_hand();
+        // }
         if (sensors[2] > 50)
         {
             Position = int(sensors_adv / sensors_sum);
