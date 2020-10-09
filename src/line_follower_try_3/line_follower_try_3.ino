@@ -283,16 +283,16 @@ void run_command(long com)
     command = 0;
 }
 
-    void setad(com)
-    {
-        ad = com;
-    }
 
-    void setad(com)
-    {
-        delay_turn = com;
-    }
+void setad(int com)
+{
+    ad = com;
+}
 
+void set_delay_turn(int com)
+{
+    delay_turn = com;
+}
 void set_speed(int com)
 {
     speed = com;
