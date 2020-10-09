@@ -139,6 +139,7 @@ void Stop()
 }
 
 int ad = 50;
+int delay_turn = 700;
 void left()
 {
     motorfr.setSpeed(speed + ad);
@@ -150,7 +151,7 @@ void left()
     motorfl.run(BACKWARD);
     motorbl.run(BACKWARD);
     motorbr.run(FORWARD);
-    delay(700);
+    delay(delay_turn);
 }
 
 void right()
@@ -361,7 +362,7 @@ void loop()
 
     else if (sensors_sum > 3500 && sensors_sum <= 4000)
     {
-
+ 
         // Serial.println("moving forward");
 
         // if(sensors[5] < 50)
@@ -379,7 +380,17 @@ void loop()
             calc_turn();
             motor_drive(right_speed, left_speed);
         }
-        if (detect_t_junction())
+        
+        else
+        {
+            forward();
+            not_turning = true;
+        }
+        
+        
+    }
+
+    else if (detect_t_junction())
         {
             // Serial.println("detect_t_junction");
             Stop();
@@ -397,11 +408,4 @@ void loop()
             right();
             not_turning = false;
         }
-        else
-        {
-            forward();
-            not_turning = true;
-        }
-        
-    }
 }
