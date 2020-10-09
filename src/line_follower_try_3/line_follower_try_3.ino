@@ -246,21 +246,21 @@ void set_speed(int com)
 }
 void setkp(int com)
 {
-    kp = com / 10000.0;
+    kp = com / 5000.0;
     Serial1.println("Kp : " + String(kp));
     Serial.println("Kp : " + String(kp));
 }
 
 void setki(int com)
 {
-    ki = com / 10000.0;
+    ki = com / 5000.0;
     Serial1.println("Ki : " + String(ki));
     Serial.println("Ki : " + String(ki));
 }
 void setkd(int com)
 {
 
-    kd = com / 10000.0;
+    kd = com / 5000.0;
     Serial1.println("Kd : " + String(kd));
     Serial.println("Kd : " + String(kd));
 }
