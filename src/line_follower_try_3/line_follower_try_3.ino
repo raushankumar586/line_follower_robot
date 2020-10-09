@@ -361,7 +361,7 @@ void loop()
         }
         else
         {
-            forward();
+            //forward();
             not_turning = true;
         }
         
