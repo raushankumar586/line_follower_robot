@@ -160,13 +160,13 @@ void calc_turn()
     // If error_value is less than zero calculate right turn speed values
     if (error_value < 0)
     {
-        right_speed = speed + error_value;
+        right_speed = speed - error_value;
         left_speed = speed;
     }
     else
     {
         right_speed = speed;
-        left_speed = speed - error_value;
+        left_speed = speed + error_value;
     }
 }
 
