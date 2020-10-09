@@ -381,6 +381,7 @@ void loop()
     {
         // Serial.println("derailed");
         Stop();
+        
     }
 
     else if (sensors_sum > 3500 && sensors_sum <= 4000)
@@ -402,6 +403,7 @@ void loop()
             pid_calc();
             calc_turn();
             motor_drive(right_speed, left_speed);
+            not_turning = true;
         }
 
         else
