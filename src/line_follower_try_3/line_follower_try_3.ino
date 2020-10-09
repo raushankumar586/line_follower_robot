@@ -213,6 +213,12 @@ void run_command(long com)
 {
     if (com == 0)
         return;
+   
+
+    if (com > 50 && com <= 200)
+    {
+        set_speed(com);
+    }
 
     if (com > 1000 && com <= 2000)
     {
@@ -232,6 +238,12 @@ void run_command(long com)
     command = 0;
 }
 
+void set_speed(int com)
+{
+    speed= com;
+    Serial1.println("speed : " + String(speed));
+    Serial.println(":speed" + String(speed));
+}
 void setkp(int com)
 {
     kp = com / 10000.0;
