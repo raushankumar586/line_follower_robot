@@ -4,10 +4,15 @@
 
 #define set_point 2000
 #define max_speed 80 //set Max Speed Value
+#include <Servo.h>
+
+Servo myservo;  
+int pos = 0;
+
 // this is for setting pid parames
-float kp = 0.04;
+float kp = 0.12;
 float ki = 0;
-float kd = 0;
+float kd = 0.2;
 
 AF_DCMotor motorfr(1);
 AF_DCMotor motorfl(4);
@@ -15,7 +20,7 @@ AF_DCMotor motorbl(3);
 AF_DCMotor motorbr(2);
 
 int command = 0;
-int speed = 160;
+int speed = 80;
 bool not_turning = true;
 int proportional = 0;
 int integral = 0;
@@ -43,7 +48,33 @@ void setup()
     motorbr.run(RELEASE);
     Serial.begin(9600);
     Serial1.begin(9600);
+    myservo.attach(9);
+    // opening a beginnning
+    for (pos = 180; pos <= 100 ; pos -= 1) { 
+    myservo.write(pos);              
+    delay(15);
+    }
     Serial.println("Setup done ");
+}
+
+void open_hand()
+{
+    //open 100
+    //close 180
+    for (pos = 160; pos <= 100; pos -= 1)
+    {
+        myservo.write(pos);
+        delay(15);
+    }
+}
+
+void close_hand()
+{
+    for (pos = 100; pos <= 160; pos += 1)
+    {
+        myservo.write(pos);
+        delay(15);
+    }
 }
 
 bool detect_left_90_degree()
@@ -332,6 +363,11 @@ void loop()
 
         // Serial.println("moving forward");
 
+        if(sensors[5] < 50)
+        {
+            Stop();
+            close_hand();
+        }
         if (sensors[2] > 50)
         {
             Position = int(sensors_adv / sensors_sum);
